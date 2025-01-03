@@ -5,25 +5,30 @@ const ProductCard = ({ product = {} }) => {
     name = '',
     description = '',
     image = 'https://via.placeholder.com/80?text=Skill',
-    language = '',
+    category = '',
     stars = 0
   } = product;
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105">
+    <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105 hover:bg-gray-900/70 border border-gray-800/50 hover:border-blue-500/50">
       <div className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <img
-            src={image}
-            alt={name}
-            className="w-12 h-12"
-          />
+          <div className="flex items-center space-x-4">
+            <img
+              src={image}
+              alt={name}
+              className="w-12 h-12 filter brightness-110"
+            />
+            <span className="px-3 py-1 bg-blue-900/50 text-blue-300 rounded-full text-sm border border-blue-700/50">
+              {category}
+            </span>
+          </div>
           <div className="flex">
             {[...Array(5)].map((_, index) => (
               <svg
                 key={index}
                 className={`w-5 h-5 ${
-                  index < stars ? 'text-yellow-400' : 'text-gray-400'
+                  index < stars ? 'text-blue-400' : 'text-gray-700'
                 }`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
@@ -33,13 +38,8 @@ const ProductCard = ({ product = {} }) => {
             ))}
           </div>
         </div>
-        <h3 className="text-xl font-semibold text-white mb-2">{name}</h3>
-        <p className="text-gray-400 text-sm mb-4">{description}</p>
-        <div className="flex items-center justify-between">
-          <span className="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm">
-            {language}
-          </span>
-        </div>
+        <h3 className="text-xl font-semibold text-blue-300 mb-2">{name}</h3>
+        <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import HireMe from './pages/Hire_me';
 
 function App() {
   return (
-    <div className="bg-gradient-to-b from-slate-700 via-purple-950 to-gray-500 min-h-screen flex flex-col">
+    <div className="bg-gradient-to-b from-gray-900 via-blue-950 to-indigo-950 min-h-screen flex flex-col">
       <NavBar />
       <main className="flex-grow">
         <Routes>
