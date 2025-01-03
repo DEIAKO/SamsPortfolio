@@ -1,25 +1,87 @@
-import React from 'react';
+import { useState } from 'react';
 import ProductList from '../components/ProductList';
 
 const Home = () => {
+    const [name, setName] = useState("Ko Ko");
+    const [age, setAge] = useState(0);
+
+    const updateName = () => {
+      setName("Samuel Htamu");
+    }
+    
+    const updateAge = () => {
+      setAge(age + 1);
+    }
+
   return (
-    <body>
-      <div>
-      <img className='w-1/4 relative top-40 left-1/2 border-4 rounded-full drop-shadow-lg z-0' src="./src/assets/samprofile.jpg" alt="" />
-      <h1 className="position-realative mt-0 ml-16 text-6xl text-orange-400 font-semibold  mb-2">Warmly welcome...</h1>
-      <h2 className="position-relative text-2xl mt-0 ml-20 text-slate-50 font-semibold">Myanmar, Developer from Philippine.</h2>
-      </div>
-      
-      <p className='position-relative font-mono text-justify text-slate-50 mx-52 text-xl mt-40 mb-28'> 🚀🙋‍♂️I am Samuel Htamu, a passionate and results-driven front-end developer with expertise in React.js and JavaScript. With a strong foundation in building dynamic, user-friendly, and responsive web applications, I specialize in creating seamless digital experiences. My proficiency in modern JavaScript frameworks, component-based architecture, and performance optimization enables me to deliver scalable solutions that meet user needs and business goals. Dedicated to continuous learning and innovation, I am eager to contribute to impactful projects and help bring ideas to life through exceptional web development.</p>
-      <p className='text-center mb-8 text-white'>Here you can browse through our collection of pets and find the perfect pet for your needs.</p>
-      <ProductList />
-      <ProductList />
-      <p className='my-32 mx-20 text-justify font-serif text-white'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni animi eum accusantium, aspernatur modi ea officiis dolorem perspiciatis dicta inventore, numquam nihil aperiam impedit maxime voluptate velit facilis ad maiores!
-      Ut quas deleniti natus harum, eligendi totam doloribus rem quo molestias quos similique quasi hic eum, eaque dignissimos facilis fugiat asperiores, tempore debitis. Quasi alias asperiores, numquam rem nostrum possimus?
-      Eligendi maxime mollitia quia? Distinctio deleniti esse, mollitia culpa maiores dolores possimus quos dolorum repellendus itaque assumenda accusamus cum eveniet commodi magnam officiis. Et voluptatibus earum provident nostrum quae illo?
-      Unde voluptatem ullam tempore voluptatibus praesentium laudantium beatae. Dolore minus vitae molestiae! Ex magni qui sunt iste et numquam exercitationem tempora. Nemo tempore nihil pariatur blanditiis, facere recusandae omnis repellat!
-      Voluptate porro autem magnam ut, repellat eaque quae quis tempore, iste assumenda modi harum totam nam libero exercitationem esse. Impedit nesciunt nihil iusto vero ipsum tenetur eos, quasi quas fugiat.</p>
-    </body>
+    <div className="min-h-screen">
+      {/* Header Section */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-12">
+        <div className="space-y-4">
+          <div className="text-2xl sm:text-4xl md:text-6xl text-orange-400 font-semibold">
+            <p>Name: {name}</p>
+            <button className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-2 rounded-md text-base sm:text-lg transition-colors' onClick={updateName}>
+              Set Name
+            </button>
+            <p className="mt-4">Age: {age}</p>
+            <button className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-2 rounded-md text-base sm:text-lg transition-colors' onClick={updateAge}>
+              Set Age
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Profile Section */}
+      <section className="relative container mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <img 
+          className='w-32 sm:w-48 md:w-64 lg:w-80 mx-auto rounded-full border-4 shadow-xl' 
+          src="./src/assets/samprofile.jpg" 
+          alt="Profile" 
+        />
+        <div className="text-center mt-8 space-y-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-orange-400 font-semibold">
+            Warmly welcome...
+          </h1>
+          <h2 className="text-lg sm:text-xl md:text-2xl text-slate-50 font-semibold">
+            Myanmar, Developer from Philippine.
+          </h2>
+        </div>
+      </section>
+
+      {/* Introduction Section */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <p className='font-mono text-slate-50 text-base sm:text-lg md:text-xl leading-relaxed text-center sm:text-justify max-w-4xl mx-auto'>
+          🚀🙋‍♂️ I am Samuel Htamu, a passionate and results-driven front-end developer with expertise in React.js and JavaScript. 
+          With a strong foundation in building dynamic, user-friendly, and responsive web applications, I specialize in creating 
+          seamless digital experiences. My proficiency in modern JavaScript frameworks, component-based architecture, and performance 
+          optimization enables me to deliver scalable solutions that meet user needs and business goals. Dedicated to continuous 
+          learning and innovation, I am eager to contribute to impactful projects and help bring ideas to life through exceptional 
+          web development.
+        </p>
+      </section>
+
+      {/* Skills Section */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <p className='text-center text-white text-sm sm:text-base md:text-lg mb-8'>
+          Here you can browse through my skills and experience in web development.
+        </p>
+        <ProductList />
+      </section>
+
+      {/* Additional Content Section */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+        <p className='font-serif text-white text-sm sm:text-base md:text-lg leading-relaxed text-justify max-w-4xl mx-auto'>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni animi eum accusantium, 
+          aspernatur modi ea officiis dolorem perspiciatis dicta inventore, numquam nihil aperiam 
+          impedit maxime voluptate velit facilis ad maiores! Ut quas deleniti natus harum, eligendi 
+          totam doloribus rem quo molestias quos similique quasi hic eum, eaque dignissimos facilis 
+          fugiat asperiores, tempore debitis. Quasi alias asperiores, numquam rem nostrum possimus?
+          Eligendi maxime mollitia quia? Distinctio deleniti esse, mollitia culpa maiores dolores 
+          possimus quos dolorum repellendus itaque assumenda accusamus cum eveniet commodi magnam 
+          officiis. Et voluptatibus earum provident nostrum quae illo?
+        </p>
+      </section>
+    </div>
   );
 };
 

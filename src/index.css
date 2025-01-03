@@ -1,3 +1,99 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-gray-100;
+    font-size: 14px;
+    @apply sm:text-base md:text-lg;
+  }
+
+  h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold;
+  }
+
+  h2 {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold;
+  }
+
+  h3 {
+    @apply text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium;
+  }
+
+  p {
+    @apply text-sm sm:text-base md:text-lg leading-relaxed;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 mx-auto max-w-7xl sm:px-6 lg:px-8;
+  }
+  
+  .section {
+    @apply py-12 sm:py-16 md:py-20 px-4 sm:px-6;
+  }
+
+  .nav-link {
+    @apply text-sm sm:text-base md:text-lg hover:text-gray-300 transition-colors;
+  }
+
+  .button-text {
+    @apply text-sm sm:text-base md:text-lg font-medium;
+  }
+
+  .card-title {
+    @apply text-lg sm:text-xl md:text-2xl font-semibold;
+  }
+
+  .card-text {
+    @apply text-sm sm:text-base leading-relaxed;
+  }
+
+  /* Dropdown Menu Styles */
+  .nav-item {
+    @apply relative;
+  }
+
+  .nav-item:hover .dropdown-menu {
+    @apply block;
+  }
+
+  .dropdown-menu {
+    @apply hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg 
+    bg-black bg-opacity-90 ring-1 ring-black ring-opacity-5;
+  }
+
+  .dropdown-item {
+    @apply block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white
+    transition-colors duration-150 ease-in-out;
+  }
+
+  /* Mobile Menu Animation */
+  .mobile-menu-enter {
+    @apply transform opacity-0 scale-95;
+  }
+
+  .mobile-menu-enter-active {
+    @apply transform opacity-100 scale-100 transition duration-200 ease-out;
+  }
+
+  .mobile-menu-exit {
+    @apply transform opacity-100 scale-100;
+  }
+
+  .mobile-menu-exit-active {
+    @apply transform opacity-0 scale-95 transition duration-200 ease-in;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
