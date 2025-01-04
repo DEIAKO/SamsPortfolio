@@ -1,62 +1,127 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+  // Animation variants for background shapes
+  const shapeVariants = {
+    animate: {
+      scale: [1, 1.2, 1],
+      rotate: [0, 180, 360],
+      transition: {
+        duration: 20,
+        repeat: Infinity,
+        ease: "linear"
+      }
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  };
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-12">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl text-orange-400 font-bold">
-            Samuel Htamu
-          </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl text-gray-300">
-            Full Stack Web Developer
-          </p>
-        </div>
-      </section>
-
-      {/* Profile Section */}
-      <section className="relative container mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <img 
-          className="w-32 sm:w-48 md:w-64 lg:w-80 mx-auto rounded-full border-4 border-orange-400 shadow-xl" 
-          src="./src/assets/samprofile.jpg" 
-          alt="Profile" 
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Animated background shapes */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          variants={shapeVariants}
+          animate="animate"
+          className="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] rounded-full bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-purple-500/20 blur-3xl"
         />
-        <div className="text-center mt-8 space-y-4">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl text-orange-400 font-semibold">
-            Welcome to My Portfolio
-          </h2>
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-300">
-            Web Developer from Myanmar
-          </p>
-        </div>
-      </section>
+        
+        <motion.div
+          variants={shapeVariants}
+          animate="animate"
+          style={{ animationDelay: "-5s" }}
+          className="absolute top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-purple-500/20 via-indigo-500/20 to-blue-500/20 blur-3xl"
+        />
+        
+        <motion.div
+          variants={shapeVariants}
+          animate="animate"
+          style={{ animationDelay: "-10s" }}
+          className="absolute -bottom-1/4 left-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-blue-500/20 blur-3xl"
+        />
+      </div>
 
-      {/* Introduction Section */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
-            I'm a passionate full-stack developer with expertise in modern web technologies.
-            I specialize in creating responsive, user-friendly web applications using
-            React, Node.js, and other cutting-edge technologies.
-          </p>
-          <div className="flex justify-center gap-4">
+      {/* Content with glassmorphism effect */}
+      <div className="relative z-10 container mx-auto px-4 py-20">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="max-w-4xl mx-auto text-center space-y-8"
+        >
+          <motion.h1 
+            variants={itemVariants}
+            className="text-5xl sm:text-6xl md:text-7xl font-bold"
+          >
+            <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text">
+              Hi, I'm Samuel Htamu
+            </span>
+          </motion.h1>
+
+          <motion.p 
+            variants={itemVariants}
+            className="text-xl sm:text-2xl text-gray-300"
+          >
+            Full Stack Web Developer crafting beautiful and functional web experiences
+          </motion.p>
+
+          <motion.div 
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
             <Link 
-              to="/about" 
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg text-lg transition-colors"
-            >
-              Learn More
-            </Link>
-            <Link 
-              to="/hire" 
-              className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg text-lg transition-colors"
+              to="/hire"
+              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full font-medium text-lg transition-all duration-300 transform hover:scale-105"
             >
               Hire Me
             </Link>
-          </div>
-        </div>
-      </section>
+            <Link 
+              to="/about"
+              className="px-8 py-3 bg-gray-800/50 hover:bg-gray-700/50 text-white rounded-full font-medium text-lg border border-gray-700 backdrop-blur-sm transition-all duration-300 transform hover:scale-105"
+            >
+              Learn More
+            </Link>
+          </motion.div>
+
+          <motion.div 
+            variants={itemVariants}
+            className="pt-12"
+          >
+            <h2 className="text-2xl font-semibold text-gray-200 mb-4">Featured Skills</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {['React', 'Node.js', 'JavaScript', 'Tailwind CSS'].map((skill) => (
+                <div 
+                  key={skill}
+                  className="bg-gray-800/30 backdrop-blur-sm p-4 rounded-lg border border-gray-700/50"
+                >
+                  {skill}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

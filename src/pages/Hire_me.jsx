@@ -1,105 +1,385 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiSend, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 
 const HireMe = () => {
+  const initialFormState = {
+    name: '',
+    email: '',
+    project: '',
+    message: '',
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = useCallback(() => {
+    const newErrors = {};
+    
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+
+    // Project validation
+    if (!formData.project) {
+      newErrors.project = 'Please select a project type';
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+    } else if (formData.message.trim().length < 10) {
+      newErrors.message = 'Message must be at least 10 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus(null), 3000);
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setSubmitStatus('success');
+      // Reset form
+      setFormData(initialFormState);
+      setErrors({});
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+      // Reset status after 3 seconds
+      setTimeout(() => setSubmitStatus(null), 3000);
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        when: "beforeChildren"
+      }
+    },
+    exit: { opacity: 0 }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10
+      }
+    }
+  };
+
+  const projectTypes = [
+    { value: 'website', label: 'Website Development' },
+    { value: 'webapp', label: 'Web Application' },
+    { value: 'mobile', label: 'Mobile App' },
+    { value: 'ecommerce', label: 'E-commerce Solution' },
+    { value: 'other', label: 'Other' }
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-20">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl sm:text-5xl font-bold text-orange-400 mb-8 text-center">
-          Hire Me
-        </h1>
+    <div className="min-h-screen py-20 px-4 relative overflow-hidden bg-gray-900">
+      {/* Animated background elements */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, 180, 360],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        className="absolute -top-1/2 -right-1/2 w-[1000px] h-[1000px] rounded-full bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 blur-3xl pointer-events-none"
+      />
 
-        {/* Contact Information */}
-        <div className="bg-gray-800 rounded-lg p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-white mb-6">Let's Work Together!</h2>
-          <p className="text-gray-300 mb-8 text-lg">
-            I'm currently available for freelance projects and full-time positions. 
-            If you're interested in working together or have any questions, please don't hesitate to reach out!
-          </p>
-          <div className="space-y-6">
-            <div className="flex items-center text-gray-300">
-              <svg className="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-              <a 
-                href="mailto:samuelhtamu114@gmail.com" 
-                className="hover:text-orange-400 transition-colors text-lg"
+      <motion.div
+        animate={{
+          scale: [1.2, 1, 1.2],
+          rotate: [360, 180, 0],
+        }}
+        transition={{
+          duration: 25,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        className="absolute -bottom-1/2 -left-1/2 w-[800px] h-[800px] rounded-full bg-gradient-to-tr from-blue-500/10 via-indigo-500/10 to-purple-500/10 blur-3xl pointer-events-none"
+      />
+
+      <div className="max-w-4xl mx-auto relative">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="space-y-12"
+        >
+          {/* Header Section */}
+          <motion.div variants={itemVariants} className="text-center space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 text-transparent bg-clip-text font-['Montserrat']">
+              Let's Work Together
+            </h1>
+            <p className="text-gray-300 text-lg md:text-xl font-['Inter']">
+              Have a project in mind? Let's create something amazing.
+            </p>
+          </motion.div>
+
+          {/* Contact Information */}
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-800/20 backdrop-blur-lg p-8 rounded-xl border border-gray-700/50"
+          >
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-indigo-400 font-['Montserrat']">Contact Information</h3>
+              <div className="space-y-3 font-['Inter']">
+                <p className="text-gray-300">
+                  <span className="text-gray-400">Email:</span><br />
+                  samuel.htamu@example.com
+                </p>
+                <p className="text-gray-300">
+                  <span className="text-gray-400">Location:</span><br />
+                  Sydney, Australia
+                </p>
+                <p className="text-gray-300">
+                  <span className="text-gray-400">Working Hours:</span><br />
+                  Monday - Friday, 9:00 AM - 6:00 PM AEST
+                </p>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-indigo-400 font-['Montserrat']">Response Time</h3>
+              <div className="space-y-3 font-['Inter']">
+                <p className="text-gray-300">
+                  I typically respond to inquiries within 24-48 hours during business days. For urgent matters, please indicate this in your message.
+                </p>
+                <p className="text-gray-300">
+                  Available for both remote and local projects in Sydney area.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.form
+            variants={itemVariants}
+            onSubmit={handleSubmit}
+            className="space-y-6 bg-gray-800/30 backdrop-blur-lg p-8 rounded-xl border border-gray-700/50 shadow-xl"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <motion.div variants={itemVariants} className="space-y-1">
+                <label htmlFor="name" className="block text-gray-300 mb-2 font-['Inter']">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100 font-['Inter'] placeholder-gray-500 transition-colors ${
+                    errors.name ? 'border-red-500' : 'border-gray-700'
+                  }`}
+                  placeholder="John Doe"
+                />
+                {errors.name && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-red-400 text-sm mt-1"
+                  >
+                    {errors.name}
+                  </motion.p>
+                )}
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="space-y-1">
+                <label htmlFor="email" className="block text-gray-300 mb-2 font-['Inter']">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100 font-['Inter'] placeholder-gray-500 transition-colors ${
+                    errors.email ? 'border-red-500' : 'border-gray-700'
+                  }`}
+                  placeholder="john@example.com"
+                />
+                {errors.email && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-red-400 text-sm mt-1"
+                  >
+                    {errors.email}
+                  </motion.p>
+                )}
+              </motion.div>
+            </div>
+
+            <motion.div variants={itemVariants} className="space-y-1">
+              <label htmlFor="project" className="block text-gray-300 mb-2 font-['Inter']">
+                Project Type
+              </label>
+              <select
+                id="project"
+                name="project"
+                value={formData.project}
+                onChange={handleChange}
+                className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100 font-['Inter'] transition-colors ${
+                  errors.project ? 'border-red-500' : 'border-gray-700'
+                }`}
               >
-                samuelhtamu114@gmail.com
-              </a>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <svg className="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-              </svg>
-              <span className="text-lg">Myitkyina, Kachin State, Myanmar</span>
-            </div>
-            <div className="flex items-center text-gray-300">
-              <svg className="w-6 h-6 mr-3 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM4.332 8.027c.81-2.334 3.074-4.021 5.754-4.021 2.68 0 4.944 1.687 5.754 4.021A8.093 8.093 0 0118 10a8 8 0 11-16 0c0-.695.07-1.373.202-2.027z" clipRule="evenodd" />
-              </svg>
-              <span className="text-lg">Available for Remote Work</span>
-            </div>
-          </div>
-        </div>
+                <option value="">Select a project type</option>
+                {projectTypes.map(type => (
+                  <option key={type.value} value={type.value}>{type.label}</option>
+                ))}
+              </select>
+              {errors.project && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-red-400 text-sm mt-1"
+                >
+                  {errors.project}
+                </motion.p>
+              )}
+            </motion.div>
 
-        {/* Services */}
-        <div className="bg-gray-800 rounded-lg p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-white mb-6">Services I Offer</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-4 rounded-lg bg-gray-700">
-              <h3 className="text-xl font-medium text-orange-400 mb-2">Web Development</h3>
-              <p className="text-gray-300">
-                Full-stack web development using React, Node.js, and modern web technologies.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg bg-gray-700">
-              <h3 className="text-xl font-medium text-orange-400 mb-2">UI/UX Design</h3>
-              <p className="text-gray-300">
-                Creating beautiful and intuitive user interfaces with modern design principles.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg bg-gray-700">
-              <h3 className="text-xl font-medium text-orange-400 mb-2">API Development</h3>
-              <p className="text-gray-300">
-                Building robust and scalable APIs using Node.js and Express.
-              </p>
-            </div>
-            <div className="p-4 rounded-lg bg-gray-700">
-              <h3 className="text-xl font-medium text-orange-400 mb-2">Consultation</h3>
-              <p className="text-gray-300">
-                Technical consultation and advice for your web development projects.
-              </p>
-            </div>
-          </div>
-        </div>
+            <motion.div variants={itemVariants} className="space-y-1">
+              <label htmlFor="message" className="block text-gray-300 mb-2 font-['Inter']">
+                Project Details
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                rows="4"
+                className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100 font-['Inter'] placeholder-gray-500 resize-none transition-colors ${
+                  errors.message ? 'border-red-500' : 'border-gray-700'
+                }`}
+                placeholder="Tell me about your project..."
+              ></textarea>
+              {errors.message && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-red-400 text-sm mt-1"
+                >
+                  {errors.message}
+                </motion.p>
+              )}
+            </motion.div>
 
-        {/* Social Links */}
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-white mb-6">Connect With Me</h2>
-          <div className="flex justify-center space-x-6">
-            <a
-              href="https://github.com/DEIAKO"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-orange-400 transition-colors"
-            >
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-            <a
-              href="https://www.linkedin.com/in/samuel-htamu-b2b3b4297/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-orange-400 transition-colors"
-            >
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm12.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-            </a>
-          </div>
-        </div>
+            <motion.div variants={itemVariants}>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={isSubmitting}
+                className={`w-full py-4 rounded-lg font-semibold text-white transition-all duration-300 font-['Inter'] flex items-center justify-center space-x-2 ${
+                  isSubmitting
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700'
+                }`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <>
+                    <FiSend className="w-5 h-5" />
+                    <span>Send Message</span>
+                  </>
+                )}
+              </motion.button>
+            </motion.div>
+          </motion.form>
+
+          {/* Status Messages */}
+          <AnimatePresence mode="wait">
+            {submitStatus && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className={`text-center p-4 rounded-lg flex items-center justify-center space-x-2 ${
+                  submitStatus === 'success'
+                    ? 'bg-green-500/20 text-green-300'
+                    : 'bg-red-500/20 text-red-300'
+                }`}
+              >
+                {submitStatus === 'success' ? (
+                  <>
+                    <FiCheckCircle className="w-5 h-5" />
+                    <span>Message sent successfully! I'll get back to you soon.</span>
+                  </>
+                ) : (
+                  <>
+                    <FiAlertCircle className="w-5 h-5" />
+                    <span>Please fix the errors in the form and try again.</span>
+                  </>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </div>
   );
